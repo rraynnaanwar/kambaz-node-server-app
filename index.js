@@ -13,25 +13,32 @@ import "dotenv/config";
 const app = express();
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: [
+    process.env.CLIENT_URL || "http://localhost:5173",
+    "https://exquisite-toffee-3adccf.netlify.app",  // Your Netlify URL
+    "http://localhost:3000",  // Alternative local development
+    "http://localhost:5173"   // Your current local development
+  ],
   credentials: true
 }));
 
-const sessionOptions = { 
-  secret: process.env.SESSION_SECRET || "kambaz", 
-  resave: false, 
-  saveUninitialized: false, 
-}; 
-if (process.env.SERVER_ENV !== "development") { 
-  sessionOptions.proxy = true; 
-  sessionOptions.cookie = { 
-    sameSite: "none", 
-    secure: true, 
-    domain: process.env.SERVER_URL, 
-  }; 
-} 
-app.use(session(sessionOptions)); 
-app.use(express.json()); 
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET || "kambaz",
+  resave: false,
+  saveUninitialized: false,
+};
+
+if (process.env.SERVER_ENV !== "development") {
+  sessionOptions.proxy = true;
+  sessionOptions.cookie = {
+    sameSite: "none",
+    secure: true,
+    domain: process.env.SERVER_URL,
+  };
+}
+
+app.use(session(sessionOptions));
+app.use(express.json());
 
 UserRoutes(app);
 CourseRoutes(app);
