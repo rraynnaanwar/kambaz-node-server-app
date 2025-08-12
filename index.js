@@ -15,10 +15,7 @@ const CONNECTION_STRING =  process.env.DATABASE_CONNECTION_STRING || "mongodb://
 mongoose.connect(CONNECTION_STRING);
 const app = express();
 
-app.use(cors({
-  origin:true,
-  credentials: true
-}));
+app.use(cors({ origin: '*' }));
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
@@ -31,6 +28,7 @@ if (process.env.SERVER_ENV !== "development") {
   sessionOptions.cookie = {
     sameSite: "none",
     secure: true,
+    domain: process.env.SERVER_URL,
   };
 }
 
