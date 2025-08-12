@@ -20,6 +20,10 @@ app.use(cors({
   credentials: true,
 }));
 
+app.options('*', cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}));
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
