@@ -9,14 +9,16 @@ import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Courses/Assignments/routes.js";
 import EnrollmentRoutes from './Kambaz/Enrollments/routes.js';
 import "dotenv/config";
+import mongoose from "mongoose";
 
+const CONNECTION_STRING =  process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
+mongoose.connect(CONNECTION_STRING);
 const app = express();
 
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || "http://localhost:5173",
     "https://exquisite-toffee-3adccf.netlify.app",  // Your Netlify URL
-    "http://localhost:3000",  // Alternative local development
     "http://localhost:5173"   // Your current local development
   ],
   credentials: true
