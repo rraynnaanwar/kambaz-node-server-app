@@ -16,9 +16,10 @@ mongoose.connect(CONNECTION_STRING);
 const app = express();
 
 app.use(cors({
-  origin: 'https://kambaz-react-a6.netlify.app',  // Your frontend URL
-  credentials: true,                               // Allow cookies to be sent cross-origin
+  origin: process.env.CLIENT_URL || "https://kambaz-react-a6.netlify.app",  // Your frontend URL
+  credentials: true,
 }));
+
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
@@ -31,7 +32,7 @@ if (process.env.SERVER_ENV !== "development") {
   sessionOptions.cookie = {
     sameSite: "none",
     secure: true,
-    //domain: process.env.SERVER_URL,
+    domain: process.env.SERVER_URL,
   };
 }
 
