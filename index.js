@@ -18,7 +18,8 @@ const app = express();
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || "http://localhost:5173",
-    "https://exquisite-toffee-3adccf.netlify.app",  // Your Netlify URL
+    "https://exquisite-toffee-3adccf.netlify.app",
+    "https://kambaz-react-a6.netlify.app",
     "http://localhost:5173"   // Your current local development
   ],
   credentials: true
