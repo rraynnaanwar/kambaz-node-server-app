@@ -16,7 +16,7 @@ mongoose.connect(CONNECTION_STRING);
 const app = express();
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "https://kambaz-react-a6.netlify.app",  // Your frontend URL
+  origin: process.env.CLIENT_URL
   credentials: true,
 }));
 
