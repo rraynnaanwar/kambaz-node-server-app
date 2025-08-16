@@ -5,6 +5,9 @@ const quizSchema = new mongoose.Schema(
     _id: { type: String, required: true },
     title: { type: String, required: true },
     courseId: { type: String, required: true },
+    
+    // Add description field
+    description: { type: String, default: "" },
 
     // Points and questions
     points: { type: Number, default: 0, required: true },
