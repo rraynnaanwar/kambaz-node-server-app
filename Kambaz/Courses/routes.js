@@ -7,6 +7,7 @@ export default function CourseRoutes(app) {
     const courses = await dao.findAllCourses();
     res.send(courses);
   };
+  
   const deleteCourse = async (req, res) => {
     const { courseId } = req.params;
     const status = await dao.deleteCourse(courseId);
@@ -37,30 +38,56 @@ export default function CourseRoutes(app) {
   };
 
   const createCourse = async (req, res) => {
-    const course = await dao.createCourse(req.body);
-    const currentUser = req.session['currentUser'];
-    if (currentUser) {
-      await enrollmentsDao.enrollUserInCourse(currentUser._id, course._id);
+    try {
+      const currentUser = req.session["currentUser"];
+      
+      if (!currentUser) {
+        return res.status(401).json({ message: "Not logged in" });
+      }
+
+      if (!req.body.name || !req.body.name.trim()) {
+        return res.status(400).json({ message: "Course name is required" });
+      }
+
+      const courseData = {
+        ...req.body,
+        createdBy: currentUser._id,
+        createdAt: new Date().toISOString(),
+      };
+
+      const course = await dao.createCourse(courseData);
+
+      // Auto-enroll the creator
+      if (currentUser && course._id) {
+        try {
+          await enrollmentsDao.enrollUserInCourse(currentUser._id, course._id);
+        } catch (enrollError) {
+          // Don't fail the course creation if enrollment fails
+          console.error("Error auto-enrolling faculty:", enrollError);
+        }
+      }
+
+      res.json(course);
+    } catch (error) {
+      console.error("Error in createCourse API:", error);
+      res.status(500).json({
+        message: "Failed to create course",
+        error: error.message,
+      });
     }
-    res.json(course);
   };
 
-    const findUsersForCourse = async (req, res) => { 
-    const { cid } = req.params; 
-    const users = await enrollmentsDao.findUsersForCourse(cid); 
-    res.json(users); 
-  } 
-
+  const findUsersForCourse = async (req, res) => {
+    const { cid } = req.params;
+    const users = await enrollmentsDao.findUsersForCourse(cid);
+    res.json(users);
+  };
 
   app.post("/api/courses", createCourse);
   app.post("/api/courses/:courseId/modules", createModuleForCourse);
-
   app.get("/api/courses/:courseId/modules", findModulesForCourse);
-  app.get("/api/courses/:cid/users", findUsersForCourse); 
-  
+  app.get("/api/courses/:cid/users", findUsersForCourse);
   app.put("/api/courses/:courseId", updateCourse);
-
   app.delete("/api/courses/:courseId", deleteCourse);
-
   app.get("/api/courses", findAllCourses);
 }
