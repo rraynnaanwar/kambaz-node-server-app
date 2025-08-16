@@ -8,18 +8,17 @@ import CourseRoutes from "./Kambaz/Courses/routes.js";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Courses/Assignments/routes.js";
 import EnrollmentRoutes from './Kambaz/Enrollments/routes.js';
+import QuizzesRoutes from './Kambaz/Courses/Quizzes/routes.js';
 import "dotenv/config";
+import mongoose from "mongoose";
 
+const CONNECTION_STRING =  process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
+mongoose.connect(CONNECTION_STRING);
 const app = express();
 
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL || "http://localhost:5173",
-    "https://exquisite-toffee-3adccf.netlify.app",  // Your Netlify URL
-    "http://localhost:3000",  // Alternative local development
-    "http://localhost:5173"   // Your current local development
-  ],
-  credentials: true
+  origin: process.env.CLIENT_URL,
+  credentials: true,
 }));
 
 const sessionOptions = {
@@ -40,6 +39,7 @@ if (process.env.SERVER_ENV !== "development") {
 app.use(session(sessionOptions));
 app.use(express.json());
 
+QuizzesRoutes(app);
 UserRoutes(app);
 CourseRoutes(app);
 ModuleRoutes(app);
