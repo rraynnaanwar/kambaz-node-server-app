@@ -9,8 +9,10 @@ import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Courses/Assignments/routes.js";
 import EnrollmentRoutes from './Kambaz/Enrollments/routes.js';
 import QuizzesRoutes from './Kambaz/Courses/Quizzes/routes.js';
+import QuestionRoutes from './Kambaz/Courses/Quizzes/Questions/routes.js';
 import "dotenv/config";
 import mongoose from "mongoose";
+import AnswersRoutes from './Kambaz/Courses/Quizzes/Answers/routes.js';
 
 const CONNECTION_STRING =  process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
 mongoose.connect(CONNECTION_STRING);
@@ -39,6 +41,8 @@ if (process.env.SERVER_ENV !== "development") {
 app.use(session(sessionOptions));
 app.use(express.json());
 
+AnswersRoutes(app);
+QuestionRoutes(app);
 QuizzesRoutes(app);
 UserRoutes(app);
 CourseRoutes(app);

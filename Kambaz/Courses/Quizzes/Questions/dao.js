@@ -31,12 +31,10 @@ export const getQuestionById = async (questionId) => {
   return await questionModel.findById(questionId);
 };
 
-// Helper function to delete all questions for a quiz (when quiz is deleted)
 export const deleteQuestionsByQuiz = async (quizId) => {
   return await questionModel.deleteMany({ quizId });
 };
 
-// Helper function to get next order number
 const getNextQuestionOrder = async (quizId) => {
   const lastQuestion = await questionModel
     .findOne({ quizId })
