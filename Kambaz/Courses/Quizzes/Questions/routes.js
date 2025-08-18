@@ -60,9 +60,12 @@ export default function QuestionRoutes(app) {
   };
 
   // QUESTION ROUTES
-  app.get("/api/quizzes/:quiz_id/questions", getQuestionsByQuiz);
-  app.get("/api/quizzes/:quiz_id/questions/:question_id", getQuestionById);
-  app.post("/api/quizzes/:quiz_id/questions", createQuestion);
-  app.put("/api/quizzes/:quiz_id/questions/:question_id", updateQuestion);
-  app.delete("/api/quizzes/:quiz_id/questions/:question_id", deleteQuestion);
+// inside QuestionRoutes
+// In QuestionRoutes function, change all routes to include "/courses":
+app.get("/api/quizzes/courses/:quiz_id/questions", getQuestionsByQuiz);
+app.get("/api/quizzes/courses/:quiz_id/questions/:question_id", getQuestionById);
+app.post("/api/quizzes/courses/:quiz_id/questions", createQuestion);
+app.put("/api/quizzes/courses/:quiz_id/questions/:question_id", updateQuestion);
+app.delete("/api/quizzes/courses/:quiz_id/questions/:question_id", deleteQuestion);
+
 }
